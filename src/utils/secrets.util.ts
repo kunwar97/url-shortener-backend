@@ -23,7 +23,7 @@ export const ENV_CRYPT_KEY = process.env.CRYPT_KEY;
 export const ENV_CRYPT_IV = process.env.CRYPT_IV;
 
 export const ENV_MEMCACHE_URL = process.env.MEMCACHE_URL;
-export const ENV_MEMCACHE_USERNAME = process.env.MEMCACHE_USERNAME || undefined
+export const ENV_MEMCACHE_USERNAME = process.env.MEMCACHE_USERNAME || undefined;
 export const ENV_MEMCACHE_PASSWORD = process.env.MEMCACHE_PASSWORD || undefined;
 
 

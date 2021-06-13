@@ -95,7 +95,7 @@ export class UrlService {
     }
 
     async checkCredentials(credentials: BasicAuthResult, username: string, password: string): Promise<boolean> {
-        return credentials.name === username && await cryptService.compareHash(credentials.pass, password)
+        return credentials.name === username && await cryptService.compareHash(credentials.pass, password);
     }
 
     generateUrlCode(url: string): string {

@@ -28,3 +28,7 @@
 - Distributing Data across regions
 - Missing User APIs
 - Improved analytics
+
+## Postman
+
+- Postman Link - [https://www.getpostman.com/collections/650a6462af5648eb378f](https://www.getpostman.com/collections/650a6462af5648eb378f)

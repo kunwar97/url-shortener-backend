@@ -39,7 +39,7 @@ export class Application {
 
         this.APP.post("/signup", errorHandler(UserController.store));
         this.APP.post("/login", errorHandler(UserController.authenticate));
-        this.APP.post("/me", [userMiddleware], errorHandler(UserController.me));
+        this.APP.get("/me", [userMiddleware], errorHandler(UserController.me));
         this.APP.get("/urls", [userMiddleware], errorHandler(UrlController.listUrls));
 
         this.APP.get("/:code", errorHandler(UrlController.redirect));

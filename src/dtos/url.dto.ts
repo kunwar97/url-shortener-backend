@@ -4,5 +4,5 @@ export interface UrlDto {
     expiry_time?: string;
     requires_password?: boolean;
     username?: string;
-    password?: string
+    password?: string;
 }
