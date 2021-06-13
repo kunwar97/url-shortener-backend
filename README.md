@@ -20,6 +20,7 @@
 
 - Using `memcached` for `LRU Caching`.
 - Generating short url by hashing using `MD5` & then encoding it to `base64`.
+- Can generate `64^8 = ~281 trillion` possible strings without collision.
 
 
 ## Improvements for Future
