@@ -14,6 +14,7 @@ import { AnalyticsController } from "./controller/analytics.controller";
 import { urlService } from "./services/entities/url.service";
 import { urlLogService } from "./services/entities/url-log.service";
 import morgan from "morgan";
+import { cacheService } from "./services/factories/cache.service";
 
 const compression = require("compression");
 
@@ -36,13 +37,15 @@ export class Application {
     initRoutes() {
         this.APP.use("/public", express.static("public", {maxAge: 31557600000}));
 
-        this.APP.get("/:code", errorHandler(UrlController.redirect));
-
         this.APP.post("/signup", errorHandler(UserController.store));
         this.APP.post("/login", errorHandler(UserController.authenticate));
         this.APP.post("/me", [userMiddleware], errorHandler(UserController.me));
+        this.APP.get("/urls", [userMiddleware], errorHandler(UrlController.listUrls));
 
-        this.APP.post("/short-url", [userMiddleware], errorHandler(UrlController.createShortUrl));
+        this.APP.get("/:code", errorHandler(UrlController.redirect));
+        this.APP.post("/urls/short-url", [userMiddleware], errorHandler(UrlController.createShortUrl));
+        this.APP.delete("/urls/:id", [userMiddleware], errorHandler(UrlController.deleteUrl));
+        this.APP.put("/urls/:id", [userMiddleware], errorHandler(UrlController.updateUrl));
         this.APP.get("/analytics/:url_code", [userMiddleware], errorHandler(AnalyticsController.getAnalytics));
     }
 
@@ -50,6 +53,7 @@ export class Application {
         cryptService;
         jwtService;
         validatorService;
+        cacheService;
 
         userService;
         urlService;
@@ -90,7 +94,7 @@ export class Application {
         this.APP.set("port", process.env.PORT || ENV_APP_PORT_REST);
         this.APP.use(bodyParser.json());
         this.APP.use(bodyParser.urlencoded({extended: true}));
-        this.APP.use(morgan("tiny"))
+        this.APP.use(morgan("tiny"));
         this.APP.use(compression({
             level: 3
         }));

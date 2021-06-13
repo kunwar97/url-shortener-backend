@@ -11,9 +11,21 @@ export class UrlService {
         return new UrlService();
     }
 
-    async showByCode(code: string) {
+    async showById(id: string): Promise<Url | undefined> {
+        return Url.findOne(id);
+    }
+
+    async showByCode(code: string): Promise<Url | undefined> {
         return Url.findOne({
             url_code: code
+        });
+    }
+
+    async listByUser(user: User): Promise<[Url[], number]> {
+        return Url.findAndCount({
+            where: {
+                user_id: user.id
+            }
         });
     }
 
@@ -35,11 +47,27 @@ export class UrlService {
         return url.save();
     }
 
-    async delete(url: Url) {
+    async update(url: Url, data: UrlDto): Promise<Url> {
+        if (data.original_url) {
+            url.original_url = data.original_url;
+        }
+
+        if (data.custom_url) {
+            url.url_code = data.custom_url;
+        }
+
+        if (data.expiry_time) {
+            url.expiry_time = data.expiry_time;
+        }
+
+        return url.save();
+    }
+
+    async delete(url: Url): Promise<Url> {
         return url.remove();
     }
 
-     generateUrlCode(url: string): string {
+    generateUrlCode(url: string): string {
         return new Buffer(MD5(url).toString()).toString("base64").substr(0, 8);
     }
 }

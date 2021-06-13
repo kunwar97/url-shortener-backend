@@ -1,6 +1,7 @@
 import { User } from "../../entity/user.model";
 import { UserDto } from "../../dtos/user.dto";
 import { cryptService } from "../factories/crypt.service";
+import { getConnection } from "typeorm";
 
 class UserService {
 

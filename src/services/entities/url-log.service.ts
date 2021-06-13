@@ -1,5 +1,6 @@
 import { Url } from "../../entity/url.model";
 import { UrlLog } from "../../entity/url-log.model";
+import { urlService } from "./url.service";
 
 
 export class UrlLogService {
@@ -11,7 +12,8 @@ export class UrlLogService {
         return new UrlLogService();
     }
 
-    async logUrlVisit(url: Url, ip: string, user_agent: string): Promise<UrlLog> {
+    async logUrlVisit(urlCode: string, ip: string, user_agent: string): Promise<UrlLog> {
+        const url = await urlService.showByCode(urlCode);
         const log = new UrlLog();
         log.url_id = url.id;
         log.ip_address = ip;

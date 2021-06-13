@@ -13,8 +13,9 @@ createConnection({
     host: ENV_DB_HOST,
     port: ENV_DB_PORT,
     database: ENV_DB_NAME,
-    logging: true,
+    logging: "all",
     synchronize: true,
+    cache: true,
     useUnifiedTopology: true,
     entities: [
         __dirname + "/entity/*.js"
