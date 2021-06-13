@@ -50,6 +50,8 @@
       "@types/express": "4.17.1",
       "@types/express-serve-static-core": "4.17.1",
       "@types/lodash": "^4.14.170",
+      "@types/mongodb": "^3.6.18",
+      "@types/morgan": "^1.9.2",
       "@types/node": "^14.17.3",
       "@types/shelljs": "0.8.3",
       "concurrently": "^6.2.0",

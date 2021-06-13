@@ -16,10 +16,9 @@ export class AnalyticsController {
             throw new UrlNotFoundException();
         }
 
-        if (url.user_id !== req.user.id) {
+        if (url.user_id.equals(req.user.id)) {
             throw new NoAccessException();
         }
-
         const logs = await urlLogService.getAnalytics(url);
 
         return res.json({

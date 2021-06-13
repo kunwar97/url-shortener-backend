@@ -11,6 +11,9 @@ import { UserController } from "./controller/user.controller";
 import { userMiddleware } from "./middlewares/user.middleware";
 import { UrlController } from "./controller/url.controller";
 import { AnalyticsController } from "./controller/analytics.controller";
+import { urlService } from "./services/entities/url.service";
+import { urlLogService } from "./services/entities/url-log.service";
+import morgan from "morgan";
 
 const compression = require("compression");
 
@@ -49,6 +52,8 @@ export class Application {
         validatorService;
 
         userService;
+        urlService;
+        urlLogService;
     }
 
     start(): void {
@@ -85,6 +90,7 @@ export class Application {
         this.APP.set("port", process.env.PORT || ENV_APP_PORT_REST);
         this.APP.use(bodyParser.json());
         this.APP.use(bodyParser.urlencoded({extended: true}));
+        this.APP.use(morgan("tiny"))
         this.APP.use(compression({
             level: 3
         }));

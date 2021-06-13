@@ -46,11 +46,16 @@ export class UrlController {
             throw new UrlNotFoundException();
         }
 
-        if (moment().isSameOrBefore(moment(url.expiry_time))) {
+        if (moment().isSameOrAfter(moment(url.expiry_time))) {
             throw new UrlExpiredException();
         }
-        console.log(req);
-        urlLogService.logUrlVisit(url, req.ip, req.headers['user-agent'])
+
+        let ip = req.headers["x-forwarded-for"] as string || req.ip;
+        if (ip.substr(0, 7) == "::ffff:") {
+            ip = ip.substr(7);
+        }
+
+        urlLogService.logUrlVisit(url, ip, req.headers["user-agent"]);
         return res.redirect(url.original_url);
     }
 
