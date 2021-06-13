@@ -9,6 +9,8 @@ import { userService } from "./services/entities/user.service";
 import { errorHandler } from "./handlers/error-handler";
 import { UserController } from "./controller/user.controller";
 import { userMiddleware } from "./middlewares/user.middleware";
+import { UrlController } from "./controller/url.controller";
+import { AnalyticsController } from "./controller/analytics.controller";
 
 const compression = require("compression");
 
@@ -31,9 +33,14 @@ export class Application {
     initRoutes() {
         this.APP.use("/public", express.static("public", {maxAge: 31557600000}));
 
+        this.APP.get("/:code", errorHandler(UrlController.redirect));
+
         this.APP.post("/signup", errorHandler(UserController.store));
         this.APP.post("/login", errorHandler(UserController.authenticate));
-        this.APP.post("/me", [userMiddleware],  errorHandler(UserController.me));
+        this.APP.post("/me", [userMiddleware], errorHandler(UserController.me));
+
+        this.APP.post("/short-url", [userMiddleware], errorHandler(UrlController.createShortUrl));
+        this.APP.get("/analytics/:url_code", [userMiddleware], errorHandler(AnalyticsController.getAnalytics));
     }
 
     initServices() {

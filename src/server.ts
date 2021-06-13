@@ -1,6 +1,7 @@
 import { ENV_APP_PORT_REST, ENV_DB_HOST, ENV_DB_NAME, ENV_DB_PORT } from "./utils/secrets.util";
 import { Application } from "./app";
 import { createConnection } from "typeorm";
+import "reflect-metadata";
 
 /**
  * Error Handler. Provides full stack - remove for production
@@ -14,6 +15,7 @@ createConnection({
     database: ENV_DB_NAME,
     logging: true,
     synchronize: true,
+    useUnifiedTopology: true,
     entities: [
         __dirname + "/entity/*.js"
     ],

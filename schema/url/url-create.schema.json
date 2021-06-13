@@ -1,0 +1,35 @@
+{
+  "$async": true,
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "original_url"
+  ],
+  "properties": {
+    "original_url": {
+      "type": "string",
+      "format": "url"
+    },
+    "custom_url": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "expiry_time": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "format": "date-time"
+        }
+      ]
+    }
+  }
+}

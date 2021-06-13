@@ -59,6 +59,12 @@ export enum ApiErrorCode {
   USER_ALREADY_EXISTS               = 102,
   USER_DEACTIVATED                  = 103,
   WRONG_PASSWORD                    = 104,
+  URL_ALREADY_EXISTS,
+  URL_NOT_FOUND,
+  URL_EXPIRED,
+  DATE_INVALID,
+
+  NO_ACCESS_ERROR,
 
   GENERAL_THROTTLING                = 8101,
   GENERAL_NOT_FOUND                 = 8102,
