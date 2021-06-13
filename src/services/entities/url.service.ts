@@ -2,6 +2,9 @@ import { UrlDto } from "../../dtos/url.dto";
 import { Url } from "../../entity/url.model";
 import { User } from "../../entity/user.model";
 import MD5 from "crypto-js/md5";
+import { isNullOrUndefined } from "util";
+import { cryptService } from "../factories/crypt.service";
+import { BasicAuthResult } from "basic-auth";
 
 export class UrlService {
     private constructor() {
@@ -43,6 +46,18 @@ export class UrlService {
             url.url_code = this.generateUrlCode(url.original_url);
         }
 
+        if (data.requires_password) {
+            url.requires_password = data.requires_password;
+        }
+
+        if (data.username) {
+            url.username = data.username;
+        }
+
+        if (data.password) {
+            url.password = cryptService.hashSync(data.password);
+        }
+
         url.user_id = user.id;
         return url.save();
     }
@@ -60,11 +75,27 @@ export class UrlService {
             url.expiry_time = data.expiry_time;
         }
 
+        if (!isNullOrUndefined(data.requires_password)) {
+            url.requires_password = data.requires_password;
+        }
+
+        if (url.username) {
+            url.username = data.username;
+        }
+
+        if (url.password) {
+            url.password = cryptService.hashSync(data.password);
+        }
+
         return url.save();
     }
 
     async delete(url: Url): Promise<Url> {
         return url.remove();
+    }
+
+    async checkCredentials(credentials: BasicAuthResult, username: string, password: string): Promise<boolean> {
+        return credentials.name === username && await cryptService.compareHash(credentials.pass, password)
     }
 
     generateUrlCode(url: string): string {

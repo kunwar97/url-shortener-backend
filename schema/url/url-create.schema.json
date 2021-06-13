@@ -30,6 +30,21 @@
           "format": "date-time"
         }
       ]
+    },
+    "requires_password": {
+      "type": "boolean"
+    },
+    "username": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "password": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }

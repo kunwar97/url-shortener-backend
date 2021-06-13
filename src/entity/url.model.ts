@@ -19,7 +19,16 @@ export class Url extends BaseEntity {
     @Column({type: "timestamp", nullable: true})
     expiry_time: string;
 
-    @CreateDateColumn({ type: "timestamp"})
+    @Column({default: false})
+    requires_password: boolean;
+
+    @Column({nullable: true})
+    username: string;
+
+    @Column({nullable: true})
+    password: string;
+
+    @CreateDateColumn({type: "timestamp"})
     created_at: Date;
 
 }

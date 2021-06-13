@@ -14,6 +14,8 @@ export class UrlTransformer extends TransformerAbstract<Url> {
             url_code: url.url_code,
             user_id: url.user_id,
             expiry_time: url.expiry_time,
+            requires_password: url.requires_password,
+            username: url.username,
             created_at: url.created_at
         };
     }

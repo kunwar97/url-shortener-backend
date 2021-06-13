@@ -13,6 +13,7 @@ import { urlLogService } from "../services/entities/url-log.service";
 import { cacheService } from "../services/factories/cache.service";
 import { NoAccessException } from "../exceptions/user/no-access.exception";
 import { Url } from "../entity/url.model";
+import auth from "basic-auth";
 
 export class UrlController {
 
@@ -22,7 +23,7 @@ export class UrlController {
         return res.json({
             data: await new UrlTransformer().transformList(urls[0]),
             count: urls[1]
-        })
+        });
     }
 
     static async createShortUrl(req: Request, res: Response, next: NextFunction) {
@@ -108,14 +109,27 @@ export class UrlController {
 
     static async redirect(req: Request, res: Response, next: NextFunction) {
         const code = req.params.code;
-        let url;
+        let url: any;
+        let username: string;
+        let password: string;
         const cachedUrl = (await cacheService.get(code)).value;
         if (cachedUrl) {
-            url = JSON.parse(cachedUrl.toString()) as { original_url: string, expiry_time: string };
+            url = JSON.parse(cachedUrl.toString());
+            if (url.auth) {
+                username = url.auth.split(":")[0];
+                password = url.auth.split(":")[1];
+            }
             console.log("cache hit", url);
         } else {
             url = await urlService.showByCode(code);
-            await UrlController.cacheUrl(url);
+            if (url?.requires_password) {
+                username = url.username;
+                password = url.password;
+            }
+
+            if (url) {
+                await UrlController.cacheUrl(url);
+            }
         }
 
         if (!url) {
@@ -134,14 +148,26 @@ export class UrlController {
             ip = ip.substr(7);
         }
 
-        urlLogService.logUrlVisit(code, ip, req.headers["user-agent"]);
-        return res.redirect(url.original_url);
+        const credentials = auth(req);
+        if (
+            !!username && !!password
+            && (!credentials || !await urlService.checkCredentials(credentials, username, password))) {
+            res.statusCode = 401;
+            res.setHeader("WWW-Authenticate", `Basic realm="example"`);
+            res.json({
+                message: "You don't have sufficient permissions to access this resource"
+            });
+        } else {
+            urlLogService.logUrlVisit(code, ip, req.headers["user-agent"]);
+            return res.redirect(url.original_url);
+        }
     }
 
     static async cacheUrl(url: Url): Promise<boolean> {
         return cacheService.set(url.url_code, JSON.stringify({
             original_url: url.original_url,
             expiry_time: url.expiry_time,
+            auth: url?.requires_password ? `${url.username}:${url.password}` : null
         }), {});
     }
 }
