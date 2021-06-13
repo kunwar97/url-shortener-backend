@@ -43,7 +43,11 @@ export class UserController {
         const user = await userService.store(inputData);
 
         return res.json({
-            data: await new UserTransformer().transform(user)
+            user: await new UserTransformer().transform(user),
+            token: jwtService.generateUserToken(user.id.toString(), {
+                customClaims: null,
+                expires: true,
+            }),
         });
     }
 
