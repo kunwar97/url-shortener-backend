@@ -1,0 +1,26 @@
+import { Entity, ObjectIdColumn, ObjectID, Column, BaseEntity, BeforeInsert, InsertEvent } from "typeorm";
+
+@Entity()
+export class User extends BaseEntity {
+
+    @ObjectIdColumn()
+    id: ObjectID;
+
+    @Column()
+    first_name: string;
+
+    @Column({
+        nullable: true
+    })
+    last_name?: string;
+
+    @Column({
+        unique: true,
+    })
+    email: string;
+
+    @Column({
+        select: false,
+    })
+    password: string;
+}
