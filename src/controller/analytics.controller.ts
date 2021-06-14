@@ -8,9 +8,9 @@ import { UrlLogTransformer } from "../transformers/url-log.transformer";
 export class AnalyticsController {
 
     static async getAnalytics(req: Request, res: Response, next: NextFunction) {
-        const code = req.params.url_code;
+        const id = req.params.id;
 
-        const url = await urlService.showByCode(code);
+        const url = await urlService.showById(id);
 
         if (!url) {
             throw new UrlNotFoundException();

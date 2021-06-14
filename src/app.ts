@@ -46,7 +46,7 @@ export class Application {
         this.APP.post("/urls/short-url", [userMiddleware], errorHandler(UrlController.createShortUrl));
         this.APP.delete("/urls/:id", [userMiddleware], errorHandler(UrlController.deleteUrl));
         this.APP.put("/urls/:id", [userMiddleware], errorHandler(UrlController.updateUrl));
-        this.APP.get("/analytics/:url_code", [userMiddleware], errorHandler(AnalyticsController.getAnalytics));
+        this.APP.get("/analytics/:id", [userMiddleware], errorHandler(AnalyticsController.getAnalytics));
     }
 
     initServices() {
